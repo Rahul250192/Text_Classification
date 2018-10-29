@@ -93,14 +93,14 @@ class Inference():
             'b2': tf.Variable(tf.random_normal([out_n]))
         }
 
-		
+        
 def modelnn(premise_input, hypothesis_input, embedding_matrix):
-	premise_rep = inference().model_1(premise_input, embedding_matrix)
-	hypothesis_rep = inference().model_1(hypothesis_input, embedding_matrix)
-	net_input = concatenate(premise_rep, hypothesis_rep)
-	network_2 = infer.model_2(net_input)
-	return pred
-	
+    premise_rep = inference().model_1(premise_input, embedding_matrix)
+    hypothesis_rep = inference().model_1(hypothesis_input, embedding_matrix)
+    net_input = concatenate(premise_rep, hypothesis_rep)
+    network_2 = infer.model_2(net_input)
+    return pred
+    
 infer = Inference()
 premise, hypothesis, output_label = infer.input_out(infer.read_file(FILE_PATH))
 
@@ -128,24 +128,24 @@ optimizer = tf.train.AdamOptimizer(learning_rate=0.0001).minimize(cost)
 with tf.Session(graph=graph) as sess:
     init.run()
     print('Initialized')
-	
-	for epoch in range(training_epochs):
-		average_loss = 0
-		total_batch = int(len(premise_input) / batch_size)
+    
+    for epoch in range(training_epochs):
+        average_loss = 0
+        total_batch = int(len(premise_input) / batch_size)
         x_batches = np.array_split(premise_input, total_batch)
         y_batches = np.array_split(premise_rep, total_batch)
-		for batch in range(total_batch):
-			batch_x, batch_y = x_batches[i], y_batches[i]
+        for batch in range(total_batch):
+            batch_x, batch_y = x_batches[i], y_batches[i]
             _, c = sess.run([optimizer, cost], 
                             feed_dict={
                                 x: batch_x, 
                                 y: batch_y
                             })
             avg_cost += c / total_batch
-		if epoch % steps == 0:
+        if epoch % steps == 0:
             print("Epoch:{}__cost:{}".format(epoch+1, avg_cost)
-			
-	print("Optimization Finished!")
-	
-	correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
-			
+            
+    print("Optimization Finished!")
+    
+    correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+            
